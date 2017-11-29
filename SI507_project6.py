@@ -3,9 +3,9 @@ import psycopg2
 import psycopg2.extras
 import csv
 import re
+from config import *
 
 ####### Write code / functions to set up database connection and cursor here.
-
 
 def get_connection_and_cursor(db_name, db_password, db_user):
     try:
@@ -57,7 +57,7 @@ def db_setup(db_name, db_password, db_user):
 ####### Write code / functions to deal with CSV files and insert data into the database here.
 
 # Function to create and populate the states table - hardcoded to three states. 
-def insert_into_states(db_name = "kalambur_507project6",db_password = "",db_user = "nikhilkalambur"):
+def insert_into_states(db_name,db_password,db_user):
 	conn, cur = get_connection_and_cursor(db_name, db_password, db_user)
 
 	cur.execute("INSERT INTO states (Name) VALUES ('Michigan')")
@@ -91,8 +91,8 @@ class Convert_csvs(object):
 		self.state_id = i
 
 # Function to insert csv file into sql table
-def insert_into_sites(fname):
-	conn, cur = get_connection_and_cursor(db_name = "kalambur_507project6",db_password = "",db_user = "nikhilkalambur")
+def insert_into_sites(fname, db_name, db_password, db_user):
+	conn, cur = get_connection_and_cursor(db_name,db_password,db_user)
 	with open(fname, 'r') as f:
 		d = csv.DictReader(f)
 		for row in d:
@@ -117,17 +117,18 @@ def insert_into_sites(fname):
 
 ####### Write code to be invoked here (e.g. invoking any functions you wrote above)
 # Set up the db
-db_setup(db_name = "kalambur_507project6", db_password = "", db_user = "nikhilkalambur")
+db_setup(db_name, db_password, db_user)
 # Populate the states table
-insert_into_states()
+insert_into_states(db_name, db_password, db_user)
 # Insert into states
-insert_into_sites("arkansas.csv")
-insert_into_sites("michigan.csv")
-insert_into_sites("california.csv")
+insert_into_sites("arkansas.csv",db_name,db_password,db_user)
+insert_into_sites("michigan.csv",db_name,db_password,db_user)
+insert_into_sites("california.csv",db_name,db_password,db_user)
+
 
 ####### Write code to make queries and save data in variables here.
 print("########### QUERY 1 ALL LOCATIONS - SAVE TO all_locations ###########")
-conn, cur = get_connection_and_cursor(db_name = "kalambur_507project6",db_password = "",db_user = "nikhilkalambur")
+conn, cur = get_connection_and_cursor(db_name,db_password,db_user)
 cur.execute("SELECT Location FROM sites")
 all_locations = cur.fetchall()
 print(all_locations)
