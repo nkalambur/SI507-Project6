@@ -97,7 +97,8 @@ def insert_into_sites(fname, db_name, db_password, db_user):
 		d = csv.DictReader(f)
 		for row in d:
 			c = Convert_csvs(row)
-			# If statement to update the state_id, since some state records
+			# If statement to update the state_id, since some site records have mismatched states in the address. 
+			# For example, One Arkansas record has address indicating in NM instead of AR
 			if "arkansas" in fname:
 				c.upd_state_id(2)
 			elif "michigan" in fname:
